@@ -74,25 +74,23 @@ jobs:
           sonar-scanner -v
 
       # 8. SonarQube Analysis
-      - name: SonarQube Analysis
-        env:
-          SONAR_HOST: ${{ secrets.SONAR_HOST }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          export PATH="$HOME/sonar-scanner-cli/bin:$PATH"
+   - name: SonarQube Analysis
+  env:
+    SONAR_HOST: ${{ secrets.SONAR_HOST }}
+    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  run: |
+    export PATH="$HOME/sonar-scanner-cli/bin:$PATH"
 
-          echo "SonarQube server URL: $SONAR_HOST"
+    echo "SonarQube server URL: $SONAR_HOST"
 
-          echo "Checking SonarQube server..."
-          curl -I "$SONAR_HOST"
+    curl -I "$SONAR_HOST"
 
-          echo "Running SonarQube analysis..."
-
-          sonar-scanner \
-            -Dsonar.projectKey=hotstar \
-            -Dsonar.sources=. \
-            -Dsonar.host.url="$SONAR_HOST" \
-            -Dsonar.token="$SONAR_TOKEN"
+    sonar-scanner \
+      -Dsonar.projectKey=hotstar \
+      -Dsonar.sources=src \
+      -Dsonar.java.binaries=target/classes \
+      -Dsonar.host.url="$SONAR_HOST" \
+      -Dsonar.token="$SONAR_TOKEN"
 
   deploy:
     runs-on: ubuntu-latest
